@@ -3,5 +3,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/pomodoro/", // ← ensures correct asset paths under GitHub Pages
+  base: "/pomodoro/",
 });
