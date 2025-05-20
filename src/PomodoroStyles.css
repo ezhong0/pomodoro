@@ -3,6 +3,16 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto+Mono:wght@300;400&display=swap');
 
+html {
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 11px;
+  }
+}
+
 /* Base styles */
 * {
   box-sizing: border-box;
@@ -203,7 +213,7 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-45%);
-  top: calc(50% - 340px);
+  top: calc(50% - 300px);
   width: auto;
   display: flex;
   gap: 12px;
