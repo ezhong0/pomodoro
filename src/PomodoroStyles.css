@@ -204,6 +204,7 @@ body {
   display: flex;
   gap: 12px;
   margin-bottom: 40px;
+  z-index: 2000;
 }
 
 .mode-button {
@@ -497,3 +498,7 @@ button:focus, button:active {
 }
 
 /* Keyboard accessibility: Spacebar toggles start/pause when not editing timer */
+
+.timer-container svg {
+  pointer-events: none;
+}
