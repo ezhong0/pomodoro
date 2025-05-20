@@ -198,13 +198,18 @@ body {
 }
 
 /* Mode selector */
+/* Position the mode selector just above the timer circle */
 .mode-selector {
   position: absolute;
-  top: 80px;
+  left: 50%;
+  transform: translateX(-45%);
+  top: calc(50% - 340px);
+  width: auto;
   display: flex;
   gap: 12px;
-  margin-bottom: 40px;
+  margin: 0;
   z-index: 2000;
+  justify-content: center;
 }
 
 .mode-button {
