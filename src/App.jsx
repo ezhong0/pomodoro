@@ -5,7 +5,7 @@ import './PomodoroStyles.css';
 
 // Cute, softer sound options
 const cuteSounds = {
-  complete: 'https://assets.mixkit.co/active_storage/sfx/3827/3827-preview.mp3', // Sweet magical chime
+  complete: 'https://assets.mixkit.co/active_storage/sfx/2317/2317-preview.mp3', // Uplifting flute notification
   tick: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3', // Soft tick sound (optional)
 };
 
