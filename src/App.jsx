@@ -245,15 +245,22 @@ function App() {
   const strokeColor =
     mode === 'work' ? theme.work : mode === 'break' ? theme.break : theme.longBreak;
 
-  // Breathing animation keyframes
-  const breathingAnimation = {
+  // Subtle breathing animation keyframes
+  const subtleBreathing = {
     scale: [0.995, 1.005],
-    opacity: [0.9, 1],
+    opacity: [0.95, 1],
     transition: {
       duration: 4,
       ease: "easeInOut",
       repeat: Infinity,
       repeatType: "reverse"
+    }
+  };
+  const noBreathing = {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.5
     }
   };
 
@@ -299,6 +306,19 @@ function App() {
     setMuted(volume === 0);
     localStorage.setItem('volume', volume);
   }, [volume]);
+
+  // Add spacebar start/pause hotkey
+  useEffect(() => {
+    const handleSpace = (e) => {
+      // Only trigger if not editing timer and not in an input
+      if (e.code === 'Space' && !isEditingTimer && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        handleStartPause();
+      }
+    };
+    window.addEventListener('keydown', handleSpace);
+    return () => window.removeEventListener('keydown', handleSpace);
+  }, [isEditingTimer, handleStartPause]);
 
   // Dynamic styles based on theme
   const dynamicStyles = {
@@ -756,7 +776,7 @@ function App() {
       <div className="timer-container">
         <motion.div
           ref={breathingAnimationRef}
-          animate={isRunning ? breathingAnimation : {}}
+          animate={isRunning ? subtleBreathing : noBreathing}
           style={{
             position: 'absolute',
             width: '100%',

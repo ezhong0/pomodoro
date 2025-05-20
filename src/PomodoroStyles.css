@@ -495,3 +495,5 @@ button:focus, button:active {
   transform: translateX(20px);
   background: #fff;
 }
+
+/* Keyboard accessibility: Spacebar toggles start/pause when not editing timer */
