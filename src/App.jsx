@@ -245,25 +245,6 @@ function App() {
   const strokeColor =
     mode === 'work' ? theme.work : mode === 'break' ? theme.break : theme.longBreak;
 
-  // Subtle breathing animation keyframes
-  const subtleBreathing = {
-    scale: [0.995, 1.005],
-    opacity: [0.95, 1],
-    transition: {
-      duration: 4,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatType: "reverse"
-    }
-  };
-  const noBreathing = {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      duration: 0.5
-    }
-  };
-
   // Handle reset
   const handleReset = () => {
     setIsRunning(false);
@@ -774,9 +755,8 @@ function App() {
 
       {/* Timer Circle */}
       <div className="timer-container">
-        <motion.div
+        <div
           ref={breathingAnimationRef}
-          animate={isRunning ? subtleBreathing : noBreathing}
           style={{
             position: 'absolute',
             width: '100%',
@@ -830,7 +810,7 @@ function App() {
             <h2 className="timer-mode">{mode === 'work' ? 'Focus Time' : mode === 'break' ? 'Short Break' : 'Long Break'}</h2>
             <p className="pomodoro-count">Pomodoros: {pomodoroCount}</p>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Controls */}
