@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import themePresets from './themes';
 import './PomodoroStyles.css';
 
@@ -7,6 +7,98 @@ import './PomodoroStyles.css';
 const sounds = {
   complete: 'https://assets.mixkit.co/active_storage/sfx/2317/2317-preview.mp3',
   tick: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3',
+};
+
+// Clean, minimalistic icons
+const Icons = {
+  sun: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="5"/>
+      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+  ),
+  moon: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  ),
+  settings: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  ),
+  volume: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    </svg>
+  ),
+  volumeMute: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <line x1="23" y1="9" x2="17" y2="15"/>
+      <line x1="17" y1="9" x2="23" y2="15"/>
+    </svg>
+  ),
+  play: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polygon points="5 3 19 12 5 21 5 3"/>
+    </svg>
+  ),
+  pause: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="6" y="4" width="4" height="16"/>
+      <rect x="14" y="4" width="4" height="16"/>
+    </svg>
+  ),
+  reset: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+      <path d="M21 3v5h-5"/>
+      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+      <path d="M3 21v-5h5"/>
+    </svg>
+  ),
+  focus: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10"/>
+      <circle cx="12" cy="12" r="6"/>
+      <circle cx="12" cy="12" r="2"/>
+    </svg>
+  ),
+  coffee: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+      <line x1="6" y1="1" x2="6" y2="4"/>
+      <line x1="10" y1="1" x2="10" y2="4"/>
+      <line x1="14" y1="1" x2="14" y2="4"/>
+    </svg>
+  ),
+  palm: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+      <path d="M2 17l10 5 10-5"/>
+      <path d="M2 12l10 5 10-5"/>
+    </svg>
+  ),
+  check: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="20,6 9,17 4,12"/>
+    </svg>
+  ),
+  plus: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  ),
+  minus: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  ),
 };
 
 function App() {
@@ -26,6 +118,7 @@ function App() {
   const [muted, setMuted] = useState(() => localStorage.getItem('muted') === 'true');
   const [autoTransition, setAutoTransition] = useState(() => localStorage.getItem('autoTransition') !== 'false');
   const [showVolumePopover, setShowVolumePopover] = useState(false);
+  const [isThemeTransitioning, setIsThemeTransitioning] = useState(false);
   
   // Timer settings
   const [workMinutes, setWorkMinutes] = useState(() => parseInt(localStorage.getItem('workMinutes')) || 25);
@@ -34,6 +127,11 @@ function App() {
   const [pomodorosBeforeLongBreak, setPomodorosBeforeLongBreak] = useState(() => parseInt(localStorage.getItem('pomodorosBeforeLongBreak')) || 4);
   const [volume, setVolume] = useState(() => parseFloat(localStorage.getItem('volume')) || 1);
 
+  // Animation values
+  const timerScale = useMotionValue(1);
+  const timerRotation = useMotionValue(0);
+  const progressScale = useSpring(1, { stiffness: 100, damping: 10 });
+  
   // Refs
   const intervalRef = useRef(null);
   const audioRef = useRef(null);
@@ -42,6 +140,27 @@ function App() {
   const volumePopoverRef = useRef(null);
 
   const theme = themePresets[currentTheme][darkMode ? 'dark' : 'light'];
+
+  // Smooth theme transition
+  const handleThemeChange = (newTheme) => {
+    setIsThemeTransitioning(true);
+    setCurrentTheme(newTheme);
+    setShowThemeSelector(false);
+    
+    setTimeout(() => {
+      setIsThemeTransitioning(false);
+    }, 300);
+  };
+
+  // Smooth dark mode transition
+  const handleDarkModeToggle = () => {
+    setIsThemeTransitioning(true);
+    setDarkMode((d) => !d);
+    
+    setTimeout(() => {
+      setIsThemeTransitioning(false);
+    }, 300);
+  };
 
   // Save settings to localStorage
   useEffect(() => {
@@ -74,6 +193,10 @@ function App() {
               audioRef.current.play();
             }
             
+            // Success animation
+            progressScale.set(1.1);
+            setTimeout(() => progressScale.set(1), 200);
+            
             if (mode === 'work') {
               const nextCount = pomodoroCount + 1;
               setPomodoroCount(nextCount);
@@ -101,7 +224,7 @@ function App() {
       clearInterval(intervalRef.current);
     }
     return () => clearInterval(intervalRef.current);
-  }, [isRunning, mode, pomodoroCount, pomodorosBeforeLongBreak, autoTransition, muted]);
+  }, [isRunning, mode, pomodoroCount, pomodorosBeforeLongBreak, autoTransition, muted, progressScale]);
 
   // Timer edit functionality
   const handleTimerEditComplete = () => {
@@ -206,15 +329,30 @@ function App() {
   const handleModeChange = (newMode) => {
     setMode(newMode);
     setIsRunning(false);
+    
+    // Mode change animation
+    timerScale.set(0.95);
+    setTimeout(() => timerScale.set(1), 150);
   };
 
   const handleReset = () => {
     setIsRunning(false);
     const durations = { work: workMinutes, break: breakMinutes, longBreak: longBreakMinutes };
     setTimeLeft(durations[mode] * 60);
+    
+    // Reset animation
+    timerRotation.set(timerRotation.get() + 360);
   };
 
-  const handleStartPause = () => setIsRunning(!isRunning);
+  const handleStartPause = () => {
+    setIsRunning(!isRunning);
+    
+    // Start/pause animation
+    if (!isRunning) {
+      timerScale.set(1.05);
+      setTimeout(() => timerScale.set(1), 200);
+    }
+  };
 
   // Timer circle calculations
   const radius = 280;
@@ -228,7 +366,11 @@ function App() {
 
   // Dynamic styles
   const dynamicStyles = {
-    appContainer: { backgroundColor, color: theme.text },
+    appContainer: { 
+      backgroundColor, 
+      color: theme.text,
+      transition: isThemeTransitioning ? 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
+    },
     headerButton: {
       background: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
       color: theme.text,
@@ -272,24 +414,37 @@ function App() {
   };
 
   return (
-    <div className="app-container" style={dynamicStyles.appContainer}>
+    <motion.div 
+      className="app-container" 
+      style={dynamicStyles.appContainer}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <audio ref={audioRef} src={sounds.complete} />
 
       {/* Header */}
-      <header className="app-header">
+      <motion.header 
+        className="app-header"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+      >
         <div className="header-left">
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setDarkMode((d) => !d)}
+            onClick={handleDarkModeToggle}
             className="header-button"
             style={dynamicStyles.headerButton}
+            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            {darkMode ? '☀️ Light' : '🌙 Dark'}
+            {darkMode ? Icons.sun : Icons.moon}
+            <span className="button-text">{darkMode ? 'Light' : 'Dark'}</span>
           </motion.button>
           
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowThemeSelector(!showThemeSelector)}
             className="header-button"
@@ -299,21 +454,23 @@ function App() {
                 (darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 
                 dynamicStyles.headerButton.background,
             }}
+            aria-label="Change theme"
           >
             <span className="theme-indicator" style={{ background: theme.work }} />
-            {themePresets[currentTheme].name}
+            <span className="button-text">{themePresets[currentTheme].name}</span>
           </motion.button>
           
           <div className="volume-control">
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               ref={volumeButtonRef}
               className="header-button volume-button"
               style={dynamicStyles.headerButton}
               onClick={() => setShowVolumePopover((v) => !v)}
+              aria-label="Volume control"
             >
-              {volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊'}
+              {volume === 0 ? Icons.volumeMute : Icons.volume}
             </motion.button>
             
             <AnimatePresence>
@@ -322,7 +479,7 @@ function App() {
                   initial={{ opacity: 0, y: -10, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 30 }}
                   ref={volumePopoverRef}
                   className="volume-popover"
                   style={{
@@ -339,7 +496,11 @@ function App() {
                     value={volume}
                     onChange={e => setVolume(parseFloat(e.target.value))}
                     className="volume-slider"
-                    style={{ '--volume-fill': strokeColor }}
+                    style={{ 
+                      '--volume-fill': strokeColor,
+                      '--volume-pct': `${volume * 100}%`
+                    }}
+                    aria-label="Volume"
                   />
                 </motion.div>
               )}
@@ -348,7 +509,7 @@ function App() {
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setSettingsOpen(!settingsOpen)}
           className="header-button settings-button"
@@ -358,10 +519,12 @@ function App() {
               (darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 
               dynamicStyles.headerButton.background,
           }}
+          aria-label="Open settings"
         >
-          ⚙️ Settings
+          {Icons.settings}
+          <span className="button-text">Settings</span>
         </motion.button>
-      </header>
+      </motion.header>
 
       {/* Theme Selector */}
       <AnimatePresence>
@@ -379,18 +542,16 @@ function App() {
               {Object.keys(themePresets).map((themeName) => (
                 <motion.button
                   key={themeName}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setCurrentTheme(themeName);
-                    setShowThemeSelector(false);
-                  }}
+                  onClick={() => handleThemeChange(themeName)}
                   className={`theme-option ${currentTheme === themeName ? 'active' : ''}`}
                   style={{
                     background: currentTheme === themeName ? 
                       (darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 
                       'transparent',
                   }}
+                  aria-label={`Select ${themePresets[themeName].name} theme`}
                 >
                   <div className="theme-preview" style={{ 
                     background: `linear-gradient(135deg, ${themePresets[themeName][darkMode ? 'dark' : 'light'].work}, ${themePresets[themeName][darkMode ? 'dark' : 'light'].break})`,
@@ -424,6 +585,7 @@ function App() {
                   checked={autoTransition}
                   onChange={() => setAutoTransition(!autoTransition)}
                   className="toggle-input"
+                  aria-label="Auto start timer"
                 />
                 <span className={`toggle-slider ${autoTransition ? 'active' : ''}`} style={{ '--toggle-color': strokeColor }} />
               </div>
@@ -432,15 +594,30 @@ function App() {
             <div className="setting-group">
               <label className="setting-label">Focus Time</label>
               <div className="number-input">
-                <button onClick={() => setWorkMinutes(prev => Math.max(1, prev - 1))}>−</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setWorkMinutes(prev => Math.max(1, prev - 1))}
+                  aria-label="Decrease focus time"
+                >
+                  {Icons.minus}
+                </motion.button>
                 <input
                   type="number"
                   value={workMinutes}
                   onChange={(e) => setWorkMinutes(Math.max(1, Math.min(180, parseInt(e.target.value) || 1)))}
                   min="1"
                   max="180"
+                  aria-label="Focus time in minutes"
                 />
-                <button onClick={() => setWorkMinutes(prev => Math.min(180, prev + 1))}>+</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setWorkMinutes(prev => Math.min(180, prev + 1))}
+                  aria-label="Increase focus time"
+                >
+                  {Icons.plus}
+                </motion.button>
               </div>
               <span className="setting-unit">min</span>
             </div>
@@ -448,15 +625,30 @@ function App() {
             <div className="setting-group">
               <label className="setting-label">Short Break</label>
               <div className="number-input">
-                <button onClick={() => setBreakMinutes(prev => Math.max(1, prev - 1))}>−</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setBreakMinutes(prev => Math.max(1, prev - 1))}
+                  aria-label="Decrease short break time"
+                >
+                  {Icons.minus}
+                </motion.button>
                 <input
                   type="number"
                   value={breakMinutes}
                   onChange={(e) => setBreakMinutes(Math.max(1, Math.min(60, parseInt(e.target.value) || 1)))}
                   min="1"
                   max="60"
+                  aria-label="Short break time in minutes"
                 />
-                <button onClick={() => setBreakMinutes(prev => Math.min(60, prev + 1))}>+</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setBreakMinutes(prev => Math.min(60, prev + 1))}
+                  aria-label="Increase short break time"
+                >
+                  {Icons.plus}
+                </motion.button>
               </div>
               <span className="setting-unit">min</span>
             </div>
@@ -464,15 +656,30 @@ function App() {
             <div className="setting-group">
               <label className="setting-label">Long Break</label>
               <div className="number-input">
-                <button onClick={() => setLongBreakMinutes(prev => Math.max(1, prev - 1))}>−</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setLongBreakMinutes(prev => Math.max(1, prev - 1))}
+                  aria-label="Decrease long break time"
+                >
+                  {Icons.minus}
+                </motion.button>
                 <input
                   type="number"
                   value={longBreakMinutes}
                   onChange={(e) => setLongBreakMinutes(Math.max(1, Math.min(120, parseInt(e.target.value) || 1)))}
                   min="1"
                   max="120"
+                  aria-label="Long break time in minutes"
                 />
-                <button onClick={() => setLongBreakMinutes(prev => Math.min(120, prev + 1))}>+</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setLongBreakMinutes(prev => Math.min(120, prev + 1))}
+                  aria-label="Increase long break time"
+                >
+                  {Icons.plus}
+                </motion.button>
               </div>
               <span className="setting-unit">min</span>
             </div>
@@ -480,56 +687,89 @@ function App() {
             <div className="setting-group">
               <label className="setting-label">Long Break After</label>
               <div className="number-input">
-                <button onClick={() => setPomodorosBeforeLongBreak(prev => Math.max(1, prev - 1))}>−</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setPomodorosBeforeLongBreak(prev => Math.max(1, prev - 1))}
+                  aria-label="Decrease pomodoros before long break"
+                >
+                  {Icons.minus}
+                </motion.button>
                 <input
                   type="number"
                   value={pomodorosBeforeLongBreak}
                   onChange={(e) => setPomodorosBeforeLongBreak(Math.max(1, Math.min(12, parseInt(e.target.value) || 1)))}
                   min="1"
                   max="12"
+                  aria-label="Pomodoros before long break"
                 />
-                <button onClick={() => setPomodorosBeforeLongBreak(prev => Math.min(12, prev + 1))}>+</button>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setPomodorosBeforeLongBreak(prev => Math.min(12, prev + 1))}
+                  aria-label="Increase pomodoros before long break"
+                >
+                  {Icons.plus}
+                </motion.button>
               </div>
               <span className="setting-unit">pomodoros</span>
             </div>
             
             <motion.button
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setPomodoroCount(0)}
               className="reset-pomodoros-btn"
               style={dynamicStyles.actionButton}
+              aria-label="Reset pomodoro count"
             >
-              Reset Progress
+              {Icons.check}
+              <span>Reset Progress</span>
             </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Mode Selector */}
-      <div className="mode-selector">
+      <motion.div 
+        className="mode-selector"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+      >
         {[
-          { key: 'work', label: 'Focus', icon: '🎯' },
-          { key: 'break', label: 'Short Break', icon: '☕' },
-          { key: 'longBreak', label: 'Long Break', icon: '🌴' }
+          { key: 'work', label: 'Focus', icon: Icons.focus },
+          { key: 'break', label: 'Short Break', icon: Icons.coffee },
+          { key: 'longBreak', label: 'Long Break', icon: Icons.palm }
         ].map(({ key, label, icon }) => (
           <motion.button
             key={key}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -3 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleModeChange(key)}
             className="mode-button"
             style={mode === key ? dynamicStyles.modeButtonActive : dynamicStyles.modeButtonInactive}
+            aria-label={`Switch to ${label.toLowerCase()} mode`}
           >
             <span className="mode-icon">{icon}</span>
             {label}
           </motion.button>
         ))}
-      </div>
+      </motion.div>
 
       {/* Timer Display */}
-      <div className="timer-container">
-        <div className="timer-circle">
+      <motion.div 
+        className="timer-container"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.6, type: "spring", stiffness: 100, damping: 15 }}
+      >
+        <motion.div 
+          className="timer-circle"
+          style={{ scale: timerScale }}
+          animate={{ rotate: timerRotation }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+        >
           <svg width="600" height="600" viewBox="0 0 800 800" className="timer-svg">
             <circle
               cx="400"
@@ -552,6 +792,7 @@ function App() {
               initial={{ strokeDashoffset: circumference }}
               animate={{ strokeDashoffset }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
+              style={{ scale: progressScale }}
             />
           </svg>
           
@@ -569,6 +810,7 @@ function App() {
                   inputMode="numeric"
                   pattern="[0-9]*"
                   style={{ color: theme.text, borderBottomColor: strokeColor }}
+                  aria-label="Edit timer"
                 />
               </div>
             ) : (
@@ -576,7 +818,9 @@ function App() {
                 className="timer-display"
                 onClick={handleTimerClick}
                 style={{ cursor: isRunning ? 'default' : 'pointer' }}
-                whileHover={!isRunning ? { scale: 1.02 } : {}}
+                whileHover={!isRunning ? { scale: 1.02, y: -2 } : {}}
+                whileTap={!isRunning ? { scale: 0.98 } : {}}
+                aria-label={isRunning ? 'Timer running' : 'Click to edit timer'}
               >
                 {formatTime(timeLeft)}
               </motion.h1>
@@ -600,32 +844,69 @@ function App() {
               Completed: {pomodoroCount} pomodoros
             </motion.p>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Control Buttons */}
-      <div className="controls">
+      <motion.div 
+        className="controls"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+      >
         <motion.button
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, y: -3 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleStartPause}
           className="control-button start-button"
           style={dynamicStyles.actionButton}
+          aria-label={isRunning ? 'Pause timer' : 'Start timer'}
         >
-          {isRunning ? '⏸️ Pause' : '▶️ Start'}
+          {isRunning ? Icons.pause : Icons.play}
+          <span>{isRunning ? 'Pause' : 'Start'}</span>
         </motion.button>
         
         <motion.button
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, y: -3 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleReset}
           className="control-button reset-button"
           style={dynamicStyles.resetButton}
+          aria-label="Reset timer"
         >
-          🔄 Reset
+          {Icons.reset}
+          <span>Reset</span>
         </motion.button>
-      </div>
-    </div>
+      </motion.div>
+
+      {/* Success Animation Overlay */}
+      <AnimatePresence>
+        {pomodoroCount > 0 && (
+          <motion.div
+            className="success-overlay"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 20 }}
+          >
+            <motion.div
+              className="success-icon"
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: [0, 10, -10, 0]
+              }}
+              transition={{ 
+                duration: 1,
+                repeat: Infinity,
+                repeatDelay: 2
+              }}
+            >
+              {Icons.check}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
