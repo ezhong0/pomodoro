@@ -4,12 +4,11 @@ const DYNAMIC_CACHE = 'pomodoro-dynamic-v1.0.0';
 
 // Files to cache immediately
 const STATIC_FILES = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/browserconfig.xml',
-  '/icons/icon-192x192.svg',
-  '/icons/icon-512x512.png'
+  '/pomodoro/',
+  '/pomodoro/index.html',
+  '/pomodoro/manifest.json',
+  '/pomodoro/browserconfig.xml',
+  '/pomodoro/icons/icon-192x192.svg'
 ];
 
 // Install event - cache static files
@@ -67,7 +66,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Handle different types of requests
-  if (url.pathname === '/' || url.pathname === '/index.html') {
+  if (url.pathname === '/pomodoro/' || url.pathname === '/pomodoro/index.html') {
     // Handle main page - always try network first, fallback to cache
     event.respondWith(
       fetch(request)
@@ -101,7 +100,7 @@ self.addEventListener('fetch', (event) => {
             });
         })
     );
-  } else if (url.pathname.startsWith('/assets/')) {
+  } else if (url.pathname.startsWith('/pomodoro/assets/')) {
     // Handle Vite assets - network first, fallback to cache
     event.respondWith(
       fetch(request)
@@ -157,8 +156,8 @@ self.addEventListener('push', (event) => {
       const data = event.data.json();
       const options = {
         body: data.body || 'Pomodoro Timer',
-        icon: '/icons/icon-192x192.svg',
-        badge: '/icons/icon-192x192.svg',
+        icon: '/pomodoro/icons/icon-192x192.svg',
+        badge: '/pomodoro/icons/icon-192x192.svg',
         vibrate: [100, 50, 100],
         data: {
           dateOfArrival: Date.now(),
@@ -168,12 +167,12 @@ self.addEventListener('push', (event) => {
           {
             action: 'start',
             title: 'Start Timer',
-            icon: '/icons/icon-192x192.svg'
+            icon: '/pomodoro/icons/icon-192x192.svg'
           },
           {
             action: 'dismiss',
             title: 'Dismiss',
-            icon: '/icons/icon-192x192.svg'
+            icon: '/pomodoro/icons/icon-192x192.svg'
           }
         ]
       };
@@ -187,7 +186,7 @@ self.addEventListener('push', (event) => {
       event.waitUntil(
         self.registration.showNotification('Pomodoro Timer', {
           body: 'Time to focus!',
-          icon: '/icons/icon-192x192.svg'
+          icon: '/pomodoro/icons/icon-192x192.svg'
         })
       );
     }
@@ -201,7 +200,7 @@ self.addEventListener('notificationclick', (event) => {
   if (event.action === 'start') {
     // Open the app and start timer
     event.waitUntil(
-      clients.openWindow('/?action=start')
+      clients.openWindow('/pomodoro/?action=start')
     );
   } else if (event.action === 'dismiss') {
     // Just close the notification
@@ -209,7 +208,7 @@ self.addEventListener('notificationclick', (event) => {
   } else {
     // Default action - open the app
     event.waitUntil(
-      clients.openWindow('/')
+      clients.openWindow('/pomodoro/')
     );
   }
 });
