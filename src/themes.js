@@ -1,154 +1,204 @@
-// themes.js - Contains all the theme presets for the Pomodoro app
+// Modern theme presets for the Pomodoro app
 
 const themePresets = {
   classic: {
     name: "Classic",
     light: {
-      work: "rgba(162, 217, 206, 0.7)", // Soft teal
-      break: "rgba(249, 231, 159, 0.7)", // Soft yellow
-      longBreak: "rgba(133, 193, 233, 0.7)", // Soft blue
-      backgroundWork: "#EFF8F6",
-      backgroundBreak: "#FFFBEF",
-      backgroundLongBreak: "#F4F9FC",
-      text: "#5D6D7E", // Darker for better contrast
-      inputBg: "rgba(255, 255, 255, 0.7)", // More solid white
-      settingsBg: "rgba(255, 255, 255, 0.9)", // More solid for settings
+      work: "#10B981", // Emerald green
+      break: "#F59E0B", // Amber
+      longBreak: "#3B82F6", // Blue
+      backgroundWork: "#F0FDF4", // Very light green
+      backgroundBreak: "#FFFBEB", // Very light amber
+      backgroundLongBreak: "#EFF6FF", // Very light blue
+      text: "#1F2937", // Dark gray
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(255, 255, 255, 0.95)",
     },
     dark: {
-      work: "rgba(80, 160, 120, 0.85)", // Darker green
-      break: "rgba(180, 150, 60, 0.85)", // Darker yellow
-      longBreak: "rgba(60, 120, 180, 0.85)", // Darker blue
-      backgroundWork: "#1A232B", // Much darker background
-      backgroundBreak: "#181818", // Much darker background
-      backgroundLongBreak: "#1B222A", // Much darker background
-      text: "#ECF0F1",
-      inputBg: "rgba(40, 45, 55, 0.8)",
-      settingsBg: "rgba(30, 40, 50, 0.95)",
+      work: "#059669", // Darker emerald
+      break: "#D97706", // Darker amber
+      longBreak: "#2563EB", // Darker blue
+      backgroundWork: "#064E3B", // Very dark green
+      backgroundBreak: "#451A03", // Very dark amber
+      backgroundLongBreak: "#1E3A8A", // Very dark blue
+      text: "#F9FAFB", // Light gray
+      inputBg: "rgba(17, 24, 39, 0.8)",
+      settingsBg: "rgba(17, 24, 39, 0.95)",
     },
   },
   forest: {
     name: "Forest",
     light: {
-      work: "rgba(76, 175, 80, 0.7)", // Green
-      break: "rgba(192, 202, 51, 0.7)", // Lime
-      longBreak: "rgba(139, 195, 74, 0.7)", // Light Green
-      backgroundWork: "#F1F8E9", // Very light green
-      backgroundBreak: "#F9FBE7", // Very light lime
-      backgroundLongBreak: "#F4F8EC", // Very light light green
-      text: "#33691E", // Dark green
-      inputBg: "rgba(255, 255, 255, 0.7)",
-      settingsBg: "rgba(241, 248, 233, 0.95)",
+      work: "#16A34A", // Green
+      break: "#84CC16", // Lime
+      longBreak: "#22C55E", // Light green
+      backgroundWork: "#F0FDF4", // Very light green
+      backgroundBreak: "#F7FEE7", // Very light lime
+      backgroundLongBreak: "#F0FDF4", // Very light green
+      text: "#166534", // Dark green
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(240, 253, 244, 0.95)",
     },
     dark: {
-      work: "rgba(60, 120, 40, 0.85)",
-      break: "rgba(110, 120, 30, 0.85)",
-      longBreak: "rgba(40, 90, 30, 0.85)",
-      backgroundWork: "#102910",
-      backgroundBreak: "#1A2B10",
-      backgroundLongBreak: "#183218",
-      text: "#DCEDC8",
-      inputBg: "rgba(16, 41, 16, 0.7)",
-      settingsBg: "rgba(16, 41, 16, 0.95)",
+      work: "#15803D", // Darker green
+      break: "#65A30D", // Darker lime
+      longBreak: "#16A34A", // Darker light green
+      backgroundWork: "#052E16", // Very dark green
+      backgroundBreak: "#1A2E05", // Very dark lime
+      backgroundLongBreak: "#052E16", // Very dark green
+      text: "#DCFCE7", // Light green
+      inputBg: "rgba(5, 46, 22, 0.8)",
+      settingsBg: "rgba(5, 46, 22, 0.95)",
     },
   },
   ocean: {
     name: "Ocean",
     light: {
-      work: "rgba(3, 169, 244, 0.7)", // Light Blue
-      break: "rgba(0, 188, 212, 0.7)", // Cyan
-      longBreak: "rgba(0, 150, 136, 0.7)", // Teal
-      backgroundWork: "#E1F5FE", // Very light blue
-      backgroundBreak: "#E0F7FA", // Very light cyan
-      backgroundLongBreak: "#E0F2F1", // Very light teal
-      text: "#01579B", // Dark blue
-      inputBg: "rgba(255, 255, 255, 0.7)",
-      settingsBg: "rgba(225, 245, 254, 0.95)",
+      work: "#0891B2", // Cyan
+      break: "#06B6D4", // Light cyan
+      longBreak: "#0EA5E9", // Sky blue
+      backgroundWork: "#F0FDFA", // Very light cyan
+      backgroundBreak: "#F0FDFA", // Very light cyan
+      backgroundLongBreak: "#F0F9FF", // Very light sky blue
+      text: "#0E7490", // Dark cyan
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(240, 253, 250, 0.95)",
     },
     dark: {
-      work: "rgba(0, 90, 160, 0.85)",
-      break: "rgba(0, 100, 120, 0.85)",
-      longBreak: "rgba(0, 70, 80, 0.85)",
-      backgroundWork: "#01213A",
-      backgroundBreak: "#00222A",
-      backgroundLongBreak: "#00181A",
-      text: "#B3E5FC",
-      inputBg: "rgba(1, 33, 58, 0.7)",
-      settingsBg: "rgba(1, 33, 58, 0.95)",
+      work: "#0E7490", // Darker cyan
+      break: "#0891B2", // Darker light cyan
+      longBreak: "#0369A1", // Darker sky blue
+      backgroundWork: "#042F2E", // Very dark cyan
+      backgroundBreak: "#042F2E", // Very dark cyan
+      backgroundLongBreak: "#0C4A6E", // Very dark sky blue
+      text: "#CFFAFE", // Light cyan
+      inputBg: "rgba(4, 47, 46, 0.8)",
+      settingsBg: "rgba(4, 47, 46, 0.95)",
     },
   },
   sunset: {
     name: "Sunset",
     light: {
-      work: "rgba(244, 67, 54, 0.7)", // Red
-      break: "rgba(255, 152, 0, 0.7)", // Orange
-      longBreak: "rgba(255, 193, 7, 0.7)", // Amber
-      backgroundWork: "#FFEBEE", // Very light red
-      backgroundBreak: "#FFF3E0", // Very light orange
-      backgroundLongBreak: "#FFF8E1", // Very light amber
-      text: "#B71C1C", // Dark red
-      inputBg: "rgba(255, 255, 255, 0.7)",
-      settingsBg: "rgba(255, 235, 238, 0.95)",
+      work: "#EF4444", // Red
+      break: "#F97316", // Orange
+      longBreak: "#F59E0B", // Amber
+      backgroundWork: "#FEF2F2", // Very light red
+      backgroundBreak: "#FFF7ED", // Very light orange
+      backgroundLongBreak: "#FFFBEB", // Very light amber
+      text: "#B91C1C", // Dark red
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(254, 242, 242, 0.95)",
     },
     dark: {
-      work: "rgba(120, 30, 30, 0.85)",
-      break: "rgba(140, 60, 0, 0.85)",
-      longBreak: "rgba(180, 60, 0, 0.85)",
-      backgroundWork: "#3A1010",
-      backgroundBreak: "#3A1A00",
-      backgroundLongBreak: "#3A1A00",
-      text: "#FFCDD2",
-      inputBg: "rgba(58, 16, 16, 0.7)",
-      settingsBg: "rgba(58, 16, 16, 0.95)",
+      work: "#DC2626", // Darker red
+      break: "#EA580C", // Darker orange
+      longBreak: "#D97706", // Darker amber
+      backgroundWork: "#450A0A", // Very dark red
+      backgroundBreak: "#451A03", // Very dark orange
+      backgroundLongBreak: "#451A03", // Very dark amber
+      text: "#FEE2E2", // Light red
+      inputBg: "rgba(69, 10, 10, 0.8)",
+      settingsBg: "rgba(69, 10, 10, 0.95)",
     },
   },
   minimal: {
     name: "Minimal",
     light: {
-      work: "rgba(158, 158, 158, 0.7)", // Grey
-      break: "rgba(189, 189, 189, 0.7)", // Light Grey
-      longBreak: "rgba(224, 224, 224, 0.7)", // Very Light Grey
-      backgroundWork: "#FAFAFA", // Almost white
-      backgroundBreak: "#F5F5F5", // Off-white
-      backgroundLongBreak: "#EEEEEE", // Light grey background
-      text: "#424242", // Dark grey text
-      inputBg: "rgba(255, 255, 255, 0.7)",
-      settingsBg: "rgba(250, 250, 250, 0.95)",
+      work: "#6B7280", // Gray
+      break: "#9CA3AF", // Light gray
+      longBreak: "#D1D5DB", // Very light gray
+      backgroundWork: "#F9FAFB", // Almost white
+      backgroundBreak: "#F3F4F6", // Off-white
+      backgroundLongBreak: "#E5E7EB", // Light gray
+      text: "#374151", // Dark gray
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(249, 250, 251, 0.95)",
     },
     dark: {
-      work: "rgba(50, 50, 50, 0.85)",
-      break: "rgba(30, 30, 30, 0.85)",
-      longBreak: "rgba(20, 20, 20, 0.85)",
-      backgroundWork: "#111111",
-      backgroundBreak: "#181818",
-      backgroundLongBreak: "#222222",
-      text: "#EEEEEE",
-      inputBg: "rgba(17, 17, 17, 0.7)",
-      settingsBg: "rgba(17, 17, 17, 0.95)",
+      work: "#4B5563", // Darker gray
+      break: "#6B7280", // Darker light gray
+      longBreak: "#9CA3AF", // Darker very light gray
+      backgroundWork: "#111827", // Very dark gray
+      backgroundBreak: "#1F2937", // Dark gray
+      backgroundLongBreak: "#374151", // Medium gray
+      text: "#F9FAFB", // Light gray
+      inputBg: "rgba(17, 24, 39, 0.8)",
+      settingsBg: "rgba(17, 24, 39, 0.95)",
     },
   },
   purple: {
     name: "Purple",
     light: {
-      work: "rgba(186, 104, 200, 0.7)", // Purple
-      break: "rgba(224, 64, 251, 0.7)", // Pink
-      longBreak: "rgba(149, 117, 205, 0.7)", // Deep Purple
-      backgroundWork: "#F3E5F5", // Very light purple
-      backgroundBreak: "#FCE4EC", // Very light pink
-      backgroundLongBreak: "#EDE7F6", // Very light deep purple
-      text: "#5E35B1", // Deep purple text
-      inputBg: "rgba(255, 255, 255, 0.7)",
-      settingsBg: "rgba(243, 229, 245, 0.95)",
+      work: "#8B5CF6", // Purple
+      break: "#EC4899", // Pink
+      longBreak: "#A855F7", // Deep purple
+      backgroundWork: "#FAF5FF", // Very light purple
+      backgroundBreak: "#FDF2F8", // Very light pink
+      backgroundLongBreak: "#F5F3FF", // Very light deep purple
+      text: "#6D28D9", // Dark purple
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(250, 245, 255, 0.95)",
     },
     dark: {
-      work: "rgba(90, 40, 120, 0.85)",
-      break: "rgba(120, 20, 60, 0.85)",
-      longBreak: "rgba(60, 20, 90, 0.85)",
-      backgroundWork: "#1A0A2A",
-      backgroundBreak: "#2A0A1A",
-      backgroundLongBreak: "#140A2A",
-      text: "#E1BEE7",
-      inputBg: "rgba(26, 10, 42, 0.7)",
-      settingsBg: "rgba(26, 10, 42, 0.95)",
+      work: "#7C3AED", // Darker purple
+      break: "#DB2777", // Darker pink
+      longBreak: "#9333EA", // Darker deep purple
+      backgroundWork: "#2E1065", // Very dark purple
+      backgroundBreak: "#831843", // Very dark pink
+      backgroundLongBreak: "#4C1D95", // Very dark deep purple
+      text: "#F3E8FF", // Light purple
+      inputBg: "rgba(46, 16, 101, 0.8)",
+      settingsBg: "rgba(46, 16, 101, 0.95)",
+    },
+  },
+  nordic: {
+    name: "Nordic",
+    light: {
+      work: "#5E81AC", // Nordic blue
+      break: "#81A1C1", // Light nordic blue
+      longBreak: "#88C0D0", // Very light nordic blue
+      backgroundWork: "#ECEFF4", // Very light gray-blue
+      backgroundBreak: "#E5E9F0", // Light gray-blue
+      backgroundLongBreak: "#D8DEE9", // Gray-blue
+      text: "#2E3440", // Dark gray
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(236, 239, 244, 0.95)",
+    },
+    dark: {
+      work: "#4C566A", // Darker nordic blue
+      break: "#5E81AC", // Darker light nordic blue
+      longBreak: "#81A1C1", // Darker very light nordic blue
+      backgroundWork: "#2E3440", // Very dark gray
+      backgroundBreak: "#3B4252", // Dark gray
+      backgroundLongBreak: "#434C5E", // Medium gray
+      text: "#ECEFF4", // Light gray
+      inputBg: "rgba(46, 52, 64, 0.8)",
+      settingsBg: "rgba(46, 52, 64, 0.95)",
+    },
+  },
+  warm: {
+    name: "Warm",
+    light: {
+      work: "#F59E0B", // Amber
+      break: "#F97316", // Orange
+      longBreak: "#EF4444", // Red
+      backgroundWork: "#FFFBEB", // Very light amber
+      backgroundBreak: "#FFF7ED", // Very light orange
+      backgroundLongBreak: "#FEF2F2", // Very light red
+      text: "#B45309", // Dark amber
+      inputBg: "rgba(255, 255, 255, 0.8)",
+      settingsBg: "rgba(255, 251, 235, 0.95)",
+    },
+    dark: {
+      work: "#D97706", // Darker amber
+      break: "#EA580C", // Darker orange
+      longBreak: "#DC2626", // Darker red
+      backgroundWork: "#451A03", // Very dark amber
+      backgroundBreak: "#450A0A", // Very dark orange
+      backgroundLongBreak: "#450A0A", // Very dark red
+      text: "#FEF3C7", // Light amber
+      inputBg: "rgba(69, 26, 3, 0.8)",
+      settingsBg: "rgba(69, 26, 3, 0.95)",
     },
   },
 };
