@@ -1,0 +1,16 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="96" cy="96" r="88" fill="#10b981" stroke="#059669" stroke-width="8"/>
+  
+  <!-- Timer circle -->
+  <circle cx="96" cy="96" r="72" fill="none" stroke="white" stroke-width="6" stroke-dasharray="452" stroke-dashoffset="113" stroke-linecap="round"/>
+  
+  <!-- Center dot -->
+  <circle cx="96" cy="96" r="8" fill="white"/>
+  
+  <!-- Numbers -->
+  <text x="96" y="110" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">25</text>
+  
+  <!-- Tomato emoji -->
+  <text x="96" y="160" text-anchor="middle" font-size="32">🍅</text>
+</svg>
