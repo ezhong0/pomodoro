@@ -119,6 +119,7 @@ function App() {
   const [autoTransition, setAutoTransition] = useState(() => localStorage.getItem('autoTransition') !== 'false');
   const [showVolumePopover, setShowVolumePopover] = useState(false);
   const [isThemeTransitioning, setIsThemeTransitioning] = useState(false);
+  const [showInstallButton, setShowInstallButton] = useState(false);
   
   // Timer settings
   const [workMinutes, setWorkMinutes] = useState(() => parseInt(localStorage.getItem('workMinutes')) || 25);
@@ -138,6 +139,7 @@ function App() {
   const timerInputRef = useRef(null);
   const volumeButtonRef = useRef(null);
   const volumePopoverRef = useRef(null);
+  const settingsPanelRef = useRef(null);
 
   const theme = themePresets[currentTheme][darkMode ? 'dark' : 'light'];
 
@@ -280,6 +282,55 @@ function App() {
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [showVolumePopover]);
+
+  // Handle clicks outside settings panel
+  useEffect(() => {
+    if (settingsOpen) {
+      const handleClickOutside = (event) => {
+        if (
+          settingsPanelRef.current &&
+          !settingsPanelRef.current.contains(event.target) &&
+          !event.target.closest('.settings-button')
+        ) {
+          setSettingsOpen(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [settingsOpen]);
+
+  // Check PWA availability and show install button
+  useEffect(() => {
+    const checkPWAAvailability = () => {
+      // Check if PWA can be installed
+      const canInstall = window.pwa?.deferredPrompt || 
+                        (window.navigator.standalone === false && /iPhone|iPad|iPod/.test(navigator.userAgent)) ||
+                        (window.navigator.standalone === false && /Android/.test(navigator.userAgent));
+      
+      setShowInstallButton(canInstall);
+    };
+
+    // Check immediately
+    checkPWAAvailability();
+
+    // Check again after a short delay to ensure PWA is initialized
+    const timer = setTimeout(checkPWAAvailability, 1000);
+
+    // Listen for PWA events
+    if (window.pwa) {
+      window.addEventListener('beforeinstallprompt', checkPWAAvailability);
+      window.addEventListener('appinstalled', () => setShowInstallButton(false));
+    }
+
+    return () => {
+      clearTimeout(timer);
+      if (window.pwa) {
+        window.removeEventListener('beforeinstallprompt', checkPWAAvailability);
+        window.removeEventListener('appinstalled', () => setShowInstallButton(false));
+      }
+    };
+  }, []);
 
   // Sync volume state
   useEffect(() => {
@@ -479,7 +530,7 @@ function App() {
                   initial={{ opacity: 0, y: -10, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                  transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 30 }}
+                  transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 15 }}
                   ref={volumePopoverRef}
                   className="volume-popover"
                   style={{
@@ -506,24 +557,61 @@ function App() {
               )}
             </AnimatePresence>
           </div>
+
+          <motion.button
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setSettingsOpen(!settingsOpen)}
+            className="header-button settings-button"
+            style={{
+              ...dynamicStyles.headerButton,
+              background: settingsOpen ? 
+                (darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 
+                dynamicStyles.headerButton.background,
+            }}
+            aria-label="Open settings"
+          >
+            {Icons.settings}
+            <span className="button-text">Settings</span>
+          </motion.button>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setSettingsOpen(!settingsOpen)}
-          className="header-button settings-button"
-          style={{
-            ...dynamicStyles.headerButton,
-            background: settingsOpen ? 
-              (darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 
-              dynamicStyles.headerButton.background,
-          }}
-          aria-label="Open settings"
-        >
-          {Icons.settings}
-          <span className="button-text">Settings</span>
-        </motion.button>
+        <div className="header-right">
+          {/* PWA Install Button */}
+          <motion.button
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                // Show iOS install instructions
+                alert('To install this app on your iPhone:\n\n1. Tap the Share button (square with arrow up)\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to confirm');
+              } else if (window.pwa?.install) {
+                window.pwa.install();
+              } else {
+                // Show general install instructions
+                alert('To install this app:\n\n1. Look for the install button in your browser\n2. Or use "Add to Home Screen" from the browser menu');
+              }
+            }}
+            className="header-button pwa-install-button"
+            style={{
+              ...dynamicStyles.headerButton,
+              background: '#10b981',
+              color: 'white',
+              display: showInstallButton ? 'flex' : 'none'
+            }}
+            aria-label="Install Pomodoro Timer app"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1, duration: 0.5 }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7,10 12,15 17,10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span className="button-text">Install App</span>
+          </motion.button>
+        </div>
       </motion.header>
 
       {/* Theme Selector */}
@@ -572,10 +660,25 @@ function App() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
+            ref={settingsPanelRef}
             className="settings-panel"
             style={dynamicStyles.settingsPanel}
           >
-            <h3 className="panel-title">Timer Settings</h3>
+            <div className="panel-header">
+              <h3 className="panel-title">Timer Settings</h3>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setSettingsOpen(false)}
+                className="panel-close-button"
+                aria-label="Close settings"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </motion.button>
+            </div>
             
             <div className="setting-group">
               <label className="setting-label">Auto Start</label>

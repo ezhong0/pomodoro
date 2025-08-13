@@ -32,7 +32,7 @@ class PWA {
 
   async registerServiceWorker() {
     try {
-      this.swRegistration = await navigator.serviceWorker.register('/sw.js');
+      this.swRegistration = await navigator.serviceWorker.register('/pomodoro/sw.js');
       console.log('Service Worker registered successfully:', this.swRegistration);
 
       // Listen for updates
@@ -77,6 +77,15 @@ class PWA {
       this.isInstalled = true;
       console.log('PWA is installed and running in standalone mode');
       this.onPWAInstalled();
+    }
+    
+    // For iOS, also check if we're in a web app
+    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      if (window.navigator.standalone === true) {
+        this.isInstalled = true;
+        console.log('PWA is installed on iOS');
+        this.onPWAInstalled();
+      }
     }
   }
 
@@ -403,8 +412,8 @@ class PWA {
     if (Notification.permission === 'granted') {
       const notification = new Notification(title, {
         body,
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-72x72.png',
+        icon: '/pomodoro/icons/icon-192x192.svg',
+        badge: '/pomodoro/icons/icon-192x192.svg',
         ...options
       });
       
@@ -425,8 +434,9 @@ class PWA {
   }
 }
 
-// Initialize PWA
+// Initialize PWA and make it globally accessible
 const pwa = new PWA();
+window.pwa = pwa; // Make it globally accessible for onclick handlers
 
 // Export for use in other modules
 export default pwa;
